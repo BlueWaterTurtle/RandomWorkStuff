@@ -12,9 +12,15 @@ REM       1 = No argument supplied
 REM       2 = File not found
 REM       3 = Copy (print submission) failed
 REM
-REM Usage examples:
-REM   print_zpl_pause_on_fail.bat "C:\Labels\shipping_label.zpl"
-REM   (Drag & drop a .zpl file onto the .bat also works.)
+REM TODO (enhancement, future): Auto-detect a shared Zebra printer if PRINTER_SHARE_NAME is left blank.
+REM       Approach sketch (PowerShell):
+REM         for /f "usebackq delims=" %%I in (`powershell -NoLogo -NoProfile -Command "Get-Printer | Where-Object Shared -eq $true | Select -ExpandProperty ShareName"`) do (
+REM            call :PickPrinter "%%I"
+REM         )
+REM         :PickPrinter would choose the first share whose name matches regex (ZDesigner|Zebra) and set PRINTER_SHARE_NAME.
+REM       Alternative (wmic): wmic printer where "Shared=True" get ShareName
+REM       Fallback: prompt user if no candidate found.
+REM       (Feature deferred while project is shelved.)
 
 setlocal
 set "PRINTER_SHARE_NAME=ZDesignerGC420dNP"
